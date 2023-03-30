@@ -16,7 +16,7 @@ go get -u github.com/helloyi/go-sshclient
 
 ## create a ssh client
 
-+ Dial with passwd
+- Dial with passwd
 
 ```go
 client, err := DialWithPasswd("host:port", "username", "passwd")
@@ -26,7 +26,7 @@ if err != nil {
 defer client.Close()
 ```
 
-+ Dial with private key
+- Dial with private key
 
 ```go
 client, err := DialWithKey("host:port", "username", "prikeyFile")
@@ -36,7 +36,7 @@ if err != nil {
 defer client.Close()
 ```
 
-+ Dial with private key and a passphrase to decrypt the key
+- Dial with private key and a passphrase to decrypt the key
 
 ```go
 client, err := DialWithKeyWithPassphrase("host:port", "username", "prikeyFile", "my-passphrase"))
@@ -46,14 +46,14 @@ if err != nil {
 defer client.Close()
 ```
 
-+ Dial
+- Dial
 
 ```go
 config := &ssh.ClientConfig{
-	User: user,
-	Auth: []ssh.AuthMethod{
-		ssh.Password("yourpasswd"),
-	},
+ User: user,
+ Auth: []ssh.AuthMethod{
+  ssh.Password("yourpasswd"),
+ },
 }
 client, err := Dial("network", "host:port", config)
 if err != nil {
@@ -62,7 +62,7 @@ if err != nil {
 defer client.Close()
 ```
 
-+ Dial from remote host
+- Dial from remote host
 
 [To PR](https://github.com/helloyi/go-sshclient/pull/13)
 
@@ -80,9 +80,9 @@ if err != nil {
 defer client.Close()
 ```
 
-## execute commmand
+## execute command
 
-+ Don't care about output, calling Run
+- Don't care about output, calling Run
 
 ```go
 // run one command
@@ -90,14 +90,14 @@ if err := client.Cmd("cmd").Run(); err {
   handleErr(err)
 }
 
-// run muti command one time
+// run multi command one time
 // if there is a command run err, and the next commands will not run
 if err := client.Cmd("cmd1").Cmd("cmd2").Cmd("cmd3").Run(); err != nil {
   handleErr(err)
 }
 ```
 
-+ Get output, calling Output
+- Get output, calling Output
 
 ```go
 out, err := client.Cmd("cmd").Output()
@@ -107,7 +107,7 @@ if err != nil {
 fmt.Println(string(out))
 ```
 
-+ Return stderr message, when execution error, calling SmartOutput
+- Return stderr message, when execution error, calling SmartOutput
 
 ```go
 out, err := client.Cmd("cmd").SmartOutput()
@@ -119,7 +119,7 @@ if err != nil {
 fmt.Println(string(out))
 ```
 
-+ Write stdout and stderr to your buffer, calling SetStdio
+- Write stdout and stderr to your buffer, calling SetStdio
 
 ```go
 var (
@@ -138,7 +138,7 @@ fmt.Println(string(stderr))
 
 ## execute script
 
-+ Run script
+- Run script
 
 ```go
 script = `
@@ -152,7 +152,7 @@ client.Script(script).Output()
 client.Script(script).SmartOutput()
 ```
 
-+ Run a shell script file
+- Run a shell script file
 
 ```go
 client.ScriptFile("/path/to/the/script").Run()
@@ -162,7 +162,7 @@ client.ScriptFile("/path/to/the/script").SmartOutput()
 
 ## get shell
 
-+ Get a non-interactive shell
+- Get a non-interactive shell
 
 ```go
 if err := client.Shell().Start(); err != nil {
@@ -170,7 +170,7 @@ if err := client.Shell().Start(); err != nil {
 }
 ```
 
-+ Get a interactive shell
+- Get a interactive shell
 
 ```go
 // default terminal
@@ -184,8 +184,8 @@ config := &sshclient.TerminalConfig {
   Height: 40,
   Weight: 80,
   Modes: ssh.TerminalModes {
-	  ssh.TTY_OP_ISPEED: 14400, // input speed = 14.4kbaud
-	  ssh.TTY_OP_OSPEED: 14400, // output speed = 14.4kbaud
+   ssh.TTY_OP_ISPEED: 14400, // input speed = 14.4kbaud
+   ssh.TTY_OP_OSPEED: 14400, // output speed = 14.4kbaud
   }
 }
 if err := client.Terminal(config).Start(); err != nil {
@@ -193,7 +193,7 @@ if err := client.Terminal(config).Start(); err != nil {
 }
 ```
 
-+ And sometimes, you could set your stdio buffer
+- And sometimes, you could set your stdio buffer
 
 ```go
 var (
@@ -212,13 +212,17 @@ fmt.Println(stdout.String())
 fmt.Println(stderr.String())
 ```
 
-
-
 ## remote file operations
 
-Use  `sftp := client.Sftp()` to obtain a `RemoteFileSystem`. Use `sftp.Closer()` to close it after use, `sftp` can be passively closed using the `client.Close()` if it is used during the client lifetime. 
+Use `sftp := client.Sftp()` to obtain a `RemoteFileSystem`.
+Use `sftp.Closer()` to close it after use, `sftp` can be passively
+closed using the `client.Close()` if it is used during the client lifetime.
 
-Because it is designed to have a one-to-one configuration-to-instance relationship, you can obtain the same `RemoteFileSystem` everywhere with the same configuration. Here is an example of the code:
+Because it is designed to have a one-to-one configuration-to-instance
+relationship, you can obtain the same `RemoteFileSystem` everywhere with
+the same configuration.
+
+Here is an example of the code:
 
 ```go
 // The following are the same Sftp specified by opts
@@ -230,17 +234,15 @@ err := client.Sftp(opts...).Mkdir("path")
 client.Sftp(opts...).Close()
 ```
 
-
-
 ### upload file
 
-+ Get a RemoteFileSystem
+- Get a RemoteFileSystem
 
 ```go
 sftp := client.Sftp()
 ```
 
-+ Then upload local file to remote
+- Then upload local file to remote
 
 ```go
 // upload
@@ -249,11 +251,10 @@ if err := sftp.Upload("host/file/path"，"remote/file/path"); err != nil {
 }
 ```
 
-+ Close RemoteFileSystem
+- Close RemoteFileSystem
 
 ```go
 if err := sftp.Close(); err != nil {
   handleErr(err)
 }
 ```
-
