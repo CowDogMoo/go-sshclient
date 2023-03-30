@@ -1,6 +1,6 @@
 module github.com/helloyi/go-sshclient
 
-go 1.13
+go 1.20
 
 require (
 	github.com/creack/pty v1.1.18
